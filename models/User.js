@@ -20,10 +20,6 @@ const userSchema = new mongoose.Schema({
     thought: [Thoughts],
     // references the user model, self reference, to get a list of friends
     friends: [User],
-    //THE BELOW COMES FROM A CLASSWORK EXAMPLE--- DONT THINK THIS IS NECESSARY
-    // // Use built in date method to get current date
-    // lastAccessed: { type: Date, default: Date.now },
-    //
      
 },
     //Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
@@ -36,7 +32,7 @@ const userSchema = new mongoose.Schema({
 );
 
  //Create a virtual getter to access the friends portion of the User Model
-userSchema.virtual('friend').get(function() {
+userSchema.virtual('friendCount').get(function() {
 return this.friends.length;
 })
 
