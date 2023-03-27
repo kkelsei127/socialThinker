@@ -1,10 +1,8 @@
-const {Schema, model} = require('mongoose')
+const {Schema} = require('mongoose')
 
 const reactionSchema = new Schema(
     {
-        //this default function is probably wrong I dunno 
-        //default value is supposed to be set to a new ObjectId
-        reactionId:{type: objectId, default: 0},
+        reactionId:{type: objectId, default:  () => new Types.ObjectId()},
         reactionBody:{type: String, required: true, max: 280},
         username:{type: String, required: true},
         createdAt: { type: Date, default: Date.now },
