@@ -1,22 +1,11 @@
-const { Thoughts, User, Reactions } = require('../models');
-const { ObjectId } = require('mongoose').Types;
-
-//aggregate function to get number of reactions overall
-const reactionCount = async () =>
-    Thoughts.aggregate()
-    .count('reactionCount')
-    .then((numberOfReactions) => numberOfReactions);
+const { Thoughts, Reactions } = require('../models');
 
 module.exports = {
     //get all thoughts
     getThoughts(req, res) {
         Thoughts.find()
             .then(async (thoughts) => {
-                const thoughtObj = {
-                    thoughts,
-                    // reactionCount: await reactionCount(),
-                };
-                console.log(thoughtObj);
+                const thoughtObj = {thoughts};
                 return res.json(thoughtObj)})
             .catch((err) => res.status(500).json(err));
     },
@@ -27,10 +16,7 @@ module.exports = {
         .then(async (thought) =>
             !thought
                 ? res.status(404).json({ message: 'no thoughts found with that id'})
-                : res.json({
-                    thought,
-                    reactionCount: await reactionCount(req.params.thoughtId),
-                })
+                : res.json({thought})
                 )
                 .catch((err) => res.status(500).json(err));
     },
@@ -73,17 +59,14 @@ module.exports = {
     async createReaction(req, res) {
         try {
             const reaction =  await Reactions.create(req.body)
-            console.log(reaction)
             const thought = await Thoughts.findOneAndUpdate(
                 {_id: req.params.thoughtsId},
                 { $addToSet: {reactions: reaction._id} },
                 {runValidators: true, new: true}
             )
-            console.log(thought);
             !thought ? res.status(404).json({ message: 'no thought found with this id'})
             : res.json(thought)
         } catch(err) {
-            console.log(err);
             res.status(500).json(err)
         }
     },
@@ -107,7 +90,6 @@ module.exports = {
                     : res.json({ message: 'Successfully removed reaction'})
             )
             .catch((err) => {
-                console.log(err);
                 res.status(500).json(err);
             });
     }

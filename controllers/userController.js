@@ -17,11 +17,9 @@ module.exports = {
                 users,
                 friendCount: await friendCount(),
             };
-            console.log(userObj);
             return res.json(userObj);
         })
         .catch((err) => {
-            console.log(err);
             return res.status(500).json(err);
         });
     },
@@ -38,7 +36,6 @@ module.exports = {
                 })
         )
         .catch((err) => {
-            console.log(err);
             return res.status(500).json(err);
         });
     },
@@ -85,15 +82,12 @@ module.exports = {
                     : res.json({ message: 'User successfully '})
             )
             .catch((err) => {
-                console.log(err);
                 res.status(500).json(err);
             });
     },
 
     //add a friend to a user
     addFriend(req, res) {
-        console.log('You are adding a friend!');
-        console.log(req.body);
         User.findOneAndUpdate(
             { _id: ObjectId(req.params.userId) },
             { $addToSet: req.body},
@@ -108,6 +102,7 @@ module.exports = {
         )
         .catch((err) => res.status(500).json(err));
     },
+
     //remove friend from a user
     removeFriend(req, res) {
         User.findOneAndUpdate(
