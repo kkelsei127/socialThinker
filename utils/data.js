@@ -1,11 +1,61 @@
 const names = [
+    'Aaran',
+    'Aaren',
+    'Aarez',
+    'Aarman',
     'Aaron',
+    'Aaron-James',
+    'Aarron',
+    'Aaryan',
+    'Aaryn',
+    'Aayan',
+    'Aazaan',
+    'Abaan',
+    'Abbas',
+    'Abdallah',
+    'Abdalroof',
+    'Abdihakim',
+    'Abdirahman',
+    'Abdisalam',
     'Abdul',
+    'Abdul-Aziz',
+    'Abdulbasir',
+    'Abdulkadir',
+    'Abdulkarem',
     'Smith',
     'Jones',
+    'Coollastname',
+    'enter_name_here',
+    'Ze',
+    'Zechariah',
+    'Zeek',
+    'Zeeshan',
+    'Zeid',
+    'Zein',
+    'Zen',
+    'Zendel',
     'Zenith',
     'Zennon',
+    'Zeph',
+    'Zerah',
+    'Zhen',
+    'Zhi',
+    'Zhong',
+    'Zhuo',
+    'Zi',
+    'Zidane',
+    'Zijie',
+    'Zinedine',
     'Zion',
+    'Zishan',
+    'Ziya',
+    'Ziyaan',
+    'Zohaib',
+    'Zohair',
+    'Zoubaeir',
+    'Zubair',
+    'Zubayr',
+    'Zuriel',
     'Xander',
     'Jared',
     'Courtney',
@@ -61,9 +111,16 @@ const reactions = [
     'You are the worst',
     'Unfollowed',
     'Reported',
-]
+];
 
-
+const domain = [
+    'yahoo',
+    'gmail',
+    'aol',
+    'hotmail',
+    'icloud',
+    'outlook',
+];
 
 //get a random item 
 const getRandItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -72,14 +129,22 @@ const getRandItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const getName = () =>
     `${getRandItem(names)}`;
 
+const getThought = () =>
+`${getRandItem(thoughtText)}`;
+
+const getReaction = () =>
+`${getRandItem(reactions)}`;
+
+const getDomain = () =>
+`${getRandItem(domain)}`;
+
 //get random post text
 const getRandThought = (int) => {
     const results = [];
     for (let i=0; i< int; i++) {
-        results.push({
-            thoughtText: getRandItem(thoughtText),
-            username: getRandItem(names)
-        });
+        results.push(
+            getThought()
+        );
     }
     return results
 };
@@ -88,10 +153,9 @@ const getRandThought = (int) => {
 const getRandReaction = (int) => {
     const results = [];
     for (let i=0; i< int; i++) {
-        results.push({
-            reactionBody: getRandItem(reactions),
-            username: getRandItem(names)
-        });
+        results.push(
+            getReaction(),
+        );
     }
     return results
 };
@@ -101,11 +165,26 @@ const getRandReaction = (int) => {
 const getRandFriend = (int) =>{
     const results =[];
     for(let i=0; i< int; i++){
-        results.push({
-            friends: getRandItem(names)
-        });
+        results.push(
+            getName()
+        );
+        
+    }
+    // console.log('~~~~~~~~~~~~~FRIENDS~~~~~~~~~~~~~~~~~~');
+    //     console.log(results);
+    return results
+    
+};
+
+//get random domain text
+const getRandDomain = (int) => {
+    const results = [];
+    for (let i=0; i< int; i++) {
+        results.push(
+            getDomain()
+        );
     }
     return results
 };
 
-module.exports = {getName, getRandThought, getRandReaction, getRandFriend}
+module.exports = {getName, getRandThought, getRandReaction, getRandFriend, getRandDomain}

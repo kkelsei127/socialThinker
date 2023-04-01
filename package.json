@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "dare": "^0.75.1",
+    "date": "^2.0.2",
+    "express": "^4.18.2",
+    "init": "^0.1.2",
+    "mongoose": "^6.9.2"
+  }
+}

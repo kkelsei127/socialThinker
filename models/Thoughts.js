@@ -1,29 +1,37 @@
-const {Schema} = require('mongoose')
+const {Schema, Types, model} = require('mongoose')
 
-const reactionSchema = new Schema(
-    {
-        reactionId:{type: objectId, default:  () => new Types.ObjectId()},
-        reactionBody:{type: String, required: true, max: 280},
-        username:{type: String, required: true},
-        createdAt: { type: Date, default: Date.now },
-    }
-)
+// const reactionSchema = new Schema(
+//     {
+//         reactionId:{type: Schema.Types.ObjectId, default:  () => new Types.ObjectId()},
+//         reactionBody:{type: String, required: true, maxlength: 280},
+//         username:{type: String, required: true},
+//         createdAt: { type: Date, default: Date.now() },
+//     }
+// )
 
 
 const thoughtSchema = new Schema(
     {
-        thoughtText: {type: String, required: true, min: 1, max: 280},
-        createdAt: { type: Date, default: Date.now },
-        username: {type: String, required: true},
+        thoughtText: {type: String, required: true, min_length: 1, max_length: 280},
+        createdAt: { type: Date, default: Date.now() },
+        username: [{
+            type: Schema.Types.String,
+            ref: 'User',
+        }],
+        userId: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User', 
+        }],
         reactions: [{
-            type: Schema.Types.objectId,
-            ref: [reactionSchema],
+            type: Schema.Types.ObjectId,
+            ref: 'Reactions',
             },
         ],
     },
     {
         toJSON: {
           virtuals: true,
+          getters: true,
         },
         id: false,
     }
@@ -35,8 +43,7 @@ thoughtSchema.virtual('reactionCount').get(function() {
     })
 
 
-//create a new class from the thought model
-const Thoughts = mongoose.model('Thoughts', thoughtSchema);
+const Thoughts = model('Thoughts', thoughtSchema);
 
 
 module.exports = Thoughts;

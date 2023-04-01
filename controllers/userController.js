@@ -17,6 +17,7 @@ module.exports = {
                 users,
                 friendCount: await friendCount(),
             };
+            console.log(userObj);
             return res.json(userObj);
         })
         .catch((err) => {
@@ -31,7 +32,10 @@ module.exports = {
         .then(async (user) =>
             !user
                 ? res.status(404).json({ message: 'No user found with that Id!'})
-                : res.json({user})
+                : res.json({
+                    user,
+                    friendCount: await friendCount(req.params.userId),
+                })
         )
         .catch((err) => {
             console.log(err);
@@ -42,8 +46,24 @@ module.exports = {
     createUser(req, res) {
         User.create(req.body)
             .then((user) => res.json(user))
+            .catch((err) => res.status(400).json(err));
+    },
+
+    //update a user
+    updateUser(req, res){
+        User.findOneAndUpdate(
+            { _id: req.params.userId},
+            { $set: req.body},
+            { runValidators: true, new: true},
+        )
+        .then((user) =>
+        !user
+            ? res.status(404).json({ message: 'no user found with this id'})
+            : res.json(user)
+            )
             .catch((err) => res.status(500).json(err));
     },
+
 
     //delete a user and remove their thoughts
     deleteUser(req, res) {
@@ -53,7 +73,7 @@ module.exports = {
                     ? res.status(404).json({ message: 'That user doesnt exist'})
                     : Thoughts.findOneAndUpdate(
                         { users: req.params.userId},
-                        { $pull: { users: req.params.userId } },
+                        { $pull: { user: req.params.userId } },
                         { new: true}
                     )
             )
@@ -70,13 +90,13 @@ module.exports = {
             });
     },
 
-    //add a thought to a user
+    //add a friend to a user
     addFriend(req, res) {
         console.log('You are adding a friend!');
         console.log(req.body);
         User.findOneAndUpdate(
-            {_id: req.params.userId },
-            { $addToSet: { friends: req.body } },
+            { _id: ObjectId(req.params.userId) },
+            { $addToSet: req.body},
             { runValidators: true, new: true }
         )
         .then((user) =>
@@ -92,7 +112,7 @@ module.exports = {
     removeFriend(req, res) {
         User.findOneAndUpdate(
             {_id: req.params.userId},
-            { $pull: { friend: {friendId: req.params.friendId} } },
+            { $pull: { friends: req.params.friendId } },
             { runValidators: true, new: true}
         )
         .then((user) =>
